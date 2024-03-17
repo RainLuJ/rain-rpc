@@ -14,4 +14,11 @@ public interface UserService {
      * @return
      */
     User getUser(User user);
+
+    /**
+     * 测试Mock是否生效（消费者调用Mock消费者则返回默认值0）
+     */
+    default Integer getAge() {
+        return 666;
+    }
 }

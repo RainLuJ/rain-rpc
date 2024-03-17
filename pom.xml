@@ -13,6 +13,7 @@
         <module>example-consumer</module>
         <module>example-provider</module>
         <module>rain-rpc-easy</module>
+        <module>rain-rpc-core</module>
     </modules>
 
     <properties>
