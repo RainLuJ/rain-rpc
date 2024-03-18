@@ -1,10 +1,11 @@
 package com.rainlu.rpc.core.server;
 
+import com.rainlu.rpc.RpcApplication;
 import com.rainlu.rpc.core.model.RpcRequest;
 import com.rainlu.rpc.core.model.RpcResponse;
 import com.rainlu.rpc.core.registry.LocalRegistry;
-import com.rainlu.rpc.core.serializer.JdkSerializer;
 import com.rainlu.rpc.core.serializer.Serializer;
+import com.rainlu.rpc.core.serializer.SerializerFactory;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerRequest;
@@ -24,8 +25,8 @@ public class HttpServerHandler implements Handler<HttpServerRequest> {
 
     @Override
     public void handle(HttpServerRequest request) {
-        // 指定序列化器
-        final Serializer serializer = new JdkSerializer();
+        // 指定序列化器（使用SPI机制获取序列化器实现类）
+        final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
 
         // 记录日志
         System.out.println("Received request: " + request.method() + " " + request.uri());

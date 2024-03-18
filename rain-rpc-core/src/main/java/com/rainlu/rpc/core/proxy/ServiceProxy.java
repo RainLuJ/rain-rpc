@@ -2,10 +2,11 @@ package com.rainlu.rpc.core.proxy;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import com.rainlu.rpc.RpcApplication;
 import com.rainlu.rpc.core.model.RpcRequest;
 import com.rainlu.rpc.core.model.RpcResponse;
-import com.rainlu.rpc.core.serializer.JdkSerializer;
 import com.rainlu.rpc.core.serializer.Serializer;
+import com.rainlu.rpc.core.serializer.SerializerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
@@ -29,8 +30,8 @@ public class ServiceProxy implements InvocationHandler {
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        // 指定序列化器
-        Serializer serializer = new JdkSerializer();
+        // 指定序列化器（使用SPI机制获取序列化器实现类）
+        final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
 
         // 构造请求
         RpcRequest rpcRequest = RpcRequest.builder()
