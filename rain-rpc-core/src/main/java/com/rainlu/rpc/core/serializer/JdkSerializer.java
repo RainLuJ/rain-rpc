@@ -1,5 +1,7 @@
 package com.rainlu.rpc.core.serializer;
 
+import com.rainlu.rpc.core.spi.intf.Serializer;
+
 import java.io.*;
 
 /**

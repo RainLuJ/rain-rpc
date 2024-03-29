@@ -3,6 +3,7 @@ package com.rainlu.rpc.core.serializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rainlu.rpc.core.model.RpcRequest;
 import com.rainlu.rpc.core.model.RpcResponse;
+import com.rainlu.rpc.core.spi.intf.Serializer;
 
 import java.io.IOException;
 

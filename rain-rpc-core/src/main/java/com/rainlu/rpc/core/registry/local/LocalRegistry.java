@@ -1,4 +1,4 @@
-package com.rainlu.rpc.core.registry;
+package com.rainlu.rpc.core.registry.local;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

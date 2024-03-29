@@ -1,4 +1,4 @@
-package com.rainlu.rpc.core.serializer;
+package com.rainlu.rpc.core.spi.intf;
 
 import java.io.IOException;
 

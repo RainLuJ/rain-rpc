@@ -2,6 +2,7 @@ package com.rainlu.rpc.core.serializer;
 
 import com.caucho.hessian.io.HessianInput;
 import com.caucho.hessian.io.HessianOutput;
+import com.rainlu.rpc.core.spi.intf.Serializer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
