@@ -2,8 +2,8 @@ package com.rainlu.example.provider;
 
 import com.rainlu.example.common.service.UserService;
 import com.rainlu.rpc.core.registry.local.LocalRegistry;
-import com.rainlu.rpc.core.server.HttpServer;
-import com.rainlu.rpc.core.server.VertxHttpServer;
+import com.rainlu.rpc.core.server.http.HttpServer;
+import com.rainlu.rpc.core.server.http.VertxHttpServer;
 
 /**
  * 简易服务提供者示例

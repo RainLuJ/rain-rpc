@@ -32,7 +32,7 @@ public class RpcApplication {
         registry.init(registryConfig);
         log.info("registry init, config = {}", registryConfig);
 
-        // 创建并注册 Shutdown Hook，JVM 退出时执行操作
+        // 实现注册中心中节点的【主动下线】：创建并注册 Shutdown Hook，在 JVM 退出时执行指定操作
         Runtime.getRuntime().addShutdownHook(new Thread(registry::destroy));
     }
 

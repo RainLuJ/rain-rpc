@@ -1,0 +1,4 @@
+jdk=com.rainlu.rpc.core.serializer.JdkSerializer
+hessian=com.rainlu.rpc.core.serializer.HessianSerializer
+json=com.rainlu.rpc.core.serializer.JsonSerializer
+kryo=com.rainlu.rpc.core.serializer.KryoSerializer
