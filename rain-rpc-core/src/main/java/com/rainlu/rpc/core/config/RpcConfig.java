@@ -1,5 +1,6 @@
 package com.rainlu.rpc.core.config;
 
+import com.rainlu.rpc.core.loadbalancer.constant.LoadBalancerKeys;
 import com.rainlu.rpc.core.serializer.SerializerKeys;
 import lombok.Data;
 
@@ -40,7 +41,14 @@ public class RpcConfig {
     private String serializer = SerializerKeys.JDK;
 
     /**
+     * 使用的负载均衡器
+     */
+    private String loadBalancer = LoadBalancerKeys.ROUND_ROBIN;
+
+    /**
      * 注册中心配置
      */
     private RegistryConfig registryConfig = new RegistryConfig();
+
+
 }
