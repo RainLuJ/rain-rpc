@@ -6,6 +6,8 @@ import cn.hutool.http.HttpResponse;
 import com.rainlu.rpc.RpcApplication;
 import com.rainlu.rpc.core.config.RpcConfig;
 import com.rainlu.rpc.core.constant.RpcConstant;
+import com.rainlu.rpc.core.spi.intf.RetryStrategy;
+import com.rainlu.rpc.core.spi.factory.RetryStrategyFactory;
 import com.rainlu.rpc.core.model.RpcRequest;
 import com.rainlu.rpc.core.model.RpcResponse;
 import com.rainlu.rpc.core.model.ServiceMetaInfo;
@@ -81,7 +83,10 @@ public class ServiceProxy implements InvocationHandler {
 //            byte[] bodyBytes = serializer.serialize(rpcRequest);
 //            RpcResponse rpcResponse = doHttpRequest(selectedServiceMetaInfo, bodyBytes, serializer);
         // rpc 请求
-        RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
+        RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
+        RpcResponse rpcResponse = retryStrategy.doRetry(() ->
+                VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
+        );
 
         return rpcResponse.getData();
     }
