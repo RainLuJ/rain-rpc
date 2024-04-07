@@ -1,4 +1,4 @@
-package com.rainlu.rpc.core.loadbalancer.constant;
+package com.rainlu.rpc.core.loadbalancer;
 
 /**
  * 负载均衡器键名常量

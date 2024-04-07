@@ -50,7 +50,7 @@ public class SpiLoader {
     private static final String[] SCAN_DIRS = new String[]{RPC_SYSTEM_SPI_DIR, RPC_CUSTOM_SPI_DIR};
 
     /**
-     * 动态加载的类列表
+     * 一次性被SPI加载的接口列表（在调用loadAll方法的前提）
      */
     private static final List<Class<?>> LOAD_CLASS_LIST = Arrays.asList(Serializer.class, Registry.class);
 
@@ -97,14 +97,14 @@ public class SpiLoader {
     }
 
     /**
-     * 加载某个类型
+     * 加载某个类型的SPI扩展接口实现类
      *
      * @param loadClass 要加载的类型（接口类型）
      * @throws IOException
      */
     public static Map<String, Class<?>> load(Class<?> loadClass) {
         log.info("加载类型为 {} 的 SPI", loadClass.getName());
-        // 扫描路径，用户自定义的 SPI 优先级高于系统 SPI，所以需要先扫描加载`系统路径`
+        // 扫描路径，用户自定义的 SPI 优先级高于系统 SPI，所以需要先扫描加载`系统路径`，这样，后加载的`用户自定义SPI`就会覆盖先加载的`系统SPI`
         Map<String, Class<?>> keyClassMap = new HashMap<>();
         for (String scanDir : SCAN_DIRS) {
             List<URL> resources = ResourceUtil.getResources(scanDir + loadClass.getName());

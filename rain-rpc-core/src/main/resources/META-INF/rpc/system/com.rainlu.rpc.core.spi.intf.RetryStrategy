@@ -1,0 +1,2 @@
+no=com.rainlu.rpc.core.fault.retry.impl.NoRetryStrategy
+fixedInterval=com.rainlu.rpc.core.fault.retry.impl.FixedIntervalRetryStrategy

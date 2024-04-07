@@ -1,0 +1,3 @@
+roundRobin=com.rainlu.rpc.core.loadbalancer.impl.RoundRobinLoadBalancer
+random=com.rainlu.rpc.core.loadbalancer.impl.RandomLoadBalancer
+consistentHash=com.rainlu.rpc.core.loadbalancer.impl.ConsistentHashLoadBalancer

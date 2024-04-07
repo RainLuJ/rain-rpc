@@ -1,0 +1,4 @@
+failBack=com.rainlu.rpc.core.fault.tolerant.impl.FailBackTolerantStrategy
+failFast=com.rainlu.rpc.core.fault.tolerant.impl.FailFastTolerantStrategy
+failOver=com.rainlu.rpc.core.fault.tolerant.impl.FailOverTolerantStrategy
+failSafe=com.rainlu.rpc.core.fault.tolerant.impl.FailSafeTolerantStrategy
