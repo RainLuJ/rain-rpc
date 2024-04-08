@@ -59,7 +59,7 @@ public class ProtocolMessage<T> {
         private long requestId;
 
         /**
-         * 消息体长度（第13个字节开始，再读4个字节就是消息体长度）
+         * 消息体长度（第13（5个byte+1个long=13字节）个字节开始，再读4个字节（int占4个字节）就是消息体长度）
          */
         private int bodyLength;
     }

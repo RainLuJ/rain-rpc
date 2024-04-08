@@ -8,7 +8,7 @@ import io.vertx.core.parsetools.RecordParser;
 /**
  * TCP 消息处理器包装
  * 装饰者模式，使用 recordParser 对原有的 buffer 处理能力进行增强
- *  增强的能力：解决接收Buffer中的数据时，产生的粘包与半包问题
+ *  增强的能力：解决接收Buffer中的数据时，产生的`粘包`与`半包`问题
  */
 public class TcpBufferHandlerWrapper implements Handler<Buffer> {
 
@@ -33,7 +33,7 @@ public class TcpBufferHandlerWrapper implements Handler<Buffer> {
      * @return
      */
     private RecordParser initRecordParser(Handler<Buffer> bufferHandler) {
-        // 构造 parser
+        // 构造 parser。用于解析固定大小“ProtocolConstant.MESSAGE_HEADER_LENGTH”的数据块
         RecordParser parser = RecordParser.newFixed(ProtocolConstant.MESSAGE_HEADER_LENGTH);
 
         parser.setOutput(new Handler<Buffer>() {
