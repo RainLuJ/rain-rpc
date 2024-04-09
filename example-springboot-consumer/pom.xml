@@ -65,7 +65,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>com.yupi.examplespringbootconsumer.ExampleSpringbootConsumerApplication</mainClass>
+                    <mainClass>com.rainlu.examplespringbootconsumer.ExampleSpringbootConsumerApplication</mainClass>
                     <skip>true</skip>
                 </configuration>
                 <executions>
