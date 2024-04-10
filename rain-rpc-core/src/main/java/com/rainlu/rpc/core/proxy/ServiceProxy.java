@@ -6,18 +6,12 @@ import cn.hutool.http.HttpResponse;
 import com.rainlu.rpc.RpcApplication;
 import com.rainlu.rpc.core.config.RpcConfig;
 import com.rainlu.rpc.core.constant.RpcConstant;
-import com.rainlu.rpc.core.spi.intf.RetryStrategy;
-import com.rainlu.rpc.core.spi.factory.RetryStrategyFactory;
 import com.rainlu.rpc.core.model.RpcRequest;
 import com.rainlu.rpc.core.model.RpcResponse;
 import com.rainlu.rpc.core.model.ServiceMetaInfo;
 import com.rainlu.rpc.core.server.tcp.VertxTcpClient;
-import com.rainlu.rpc.core.spi.factory.LoadBalancerFactory;
-import com.rainlu.rpc.core.spi.factory.RegistryFactory;
-import com.rainlu.rpc.core.spi.factory.SerializerFactory;
-import com.rainlu.rpc.core.spi.intf.LoadBalancer;
-import com.rainlu.rpc.core.spi.intf.Registry;
-import com.rainlu.rpc.core.spi.intf.Serializer;
+import com.rainlu.rpc.core.spi.factory.*;
+import com.rainlu.rpc.core.spi.intf.*;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
@@ -44,9 +38,6 @@ public class ServiceProxy implements InvocationHandler {
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        // 指定序列化器（使用SPI机制获取序列化器实现类）
-        final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
-
         // 构造请求参数
         String serviceName = method.getDeclaringClass().getName();
         RpcRequest rpcRequest = RpcRequest.builder()
@@ -59,12 +50,10 @@ public class ServiceProxy implements InvocationHandler {
         RpcConfig rpcConfig = RpcApplication.getRpcConfig();
         // 从注册中心获取服务提供者请求地址
         Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
-
         // 构造当前请求的服务的信息
         ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
         serviceMetaInfo.setServiceName(serviceName);
         serviceMetaInfo.setServiceVersion(RpcConstant.DEFAULT_SERVICE_VERSION);
-
         // 发现服务
         List<ServiceMetaInfo> serviceMetaInfoList = registry.serviceDiscovery(serviceMetaInfo.getServiceKey());
         if (CollUtil.isEmpty(serviceMetaInfoList)) {
@@ -77,16 +66,23 @@ public class ServiceProxy implements InvocationHandler {
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("methodName", rpcRequest.getMethodName());
         ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParams, serviceMetaInfoList);
-//            // http 请求
-//            // 指定序列化器
-//            Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
-//            byte[] bodyBytes = serializer.serialize(rpcRequest);
-//            RpcResponse rpcResponse = doHttpRequest(selectedServiceMetaInfo, bodyBytes, serializer);
-        // rpc 请求
-        RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
-        RpcResponse rpcResponse = retryStrategy.doRetry(() ->
-                VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
-        );
+
+//            // （1）发送 http 请求
+//            RpcResponse rpcResponse = doHttpRequest(selectedServiceMetaInfo, bodyBytes);
+
+        // （2）发送 rpc 请求
+        // 使用重试机制
+        RpcResponse rpcResponse;
+        try {
+            RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
+            rpcResponse = retryStrategy.doRetry(() ->
+                    VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
+            );
+        } catch (Exception e) {
+            // 容错机制
+            TolerantStrategy tolerantStrategy = TolerantStrategyFactory.getInstance(rpcConfig.getTolerantStrategy());
+            rpcResponse = tolerantStrategy.doTolerant(null, e);
+        }
 
         return rpcResponse.getData();
     }
@@ -133,6 +129,7 @@ public class ServiceProxy implements InvocationHandler {
      * @throws IOException
      */
     private static RpcResponse doHttpRequest(ServiceMetaInfo selectedServiceMetaInfo, byte[] bodyBytes) throws IOException {
+        // 获取序列化器（使用SPI机制获取序列化器实现类），将服务器发送的序列化消息反序列化为对象
         final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
         // 发送 HTTP 请求
         try (HttpResponse httpResponse = HttpRequest.post(selectedServiceMetaInfo.getServiceAddress())

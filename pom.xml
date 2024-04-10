@@ -15,6 +15,7 @@
         <module>rain-rpc-easy</module>
         <module>rain-rpc-core</module>
         <module>yu-rpc-spring-boot-starter</module>
+        <module>vertxDemo</module>
     </modules>
 
     <properties>

@@ -37,7 +37,7 @@ public class RpcApplication {
     }
 
     /**
-     * 初始化
+     * 初始化：加载配置
      */
     public static void init() {
         RpcConfig newRpcConfig;

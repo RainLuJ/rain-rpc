@@ -2,7 +2,7 @@ package com.rainlu.rpc.core.spi.factory;
 
 import com.rainlu.rpc.core.fault.retry.impl.NoRetryStrategy;
 import com.rainlu.rpc.core.spi.intf.RetryStrategy;
-import com.yupi.yurpc.spi.SpiLoader;
+import com.rainlu.rpc.spi.SpiLoader;
 
 /**
  * 重试策略工厂（用于获取重试器对象）

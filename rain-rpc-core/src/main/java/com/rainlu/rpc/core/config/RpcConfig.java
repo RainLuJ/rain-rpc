@@ -1,6 +1,8 @@
 package com.rainlu.rpc.core.config;
 
-import com.rainlu.rpc.core.loadbalancer.constant.LoadBalancerKeys;
+import com.rainlu.rpc.core.fault.retry.RetryStrategyKeys;
+import com.rainlu.rpc.core.fault.tolerant.TolerantStrategyKeys;
+import com.rainlu.rpc.core.loadbalancer.LoadBalancerKeys;
 import com.rainlu.rpc.core.serializer.SerializerKeys;
 import lombok.Data;
 
@@ -44,6 +46,16 @@ public class RpcConfig {
      * 使用的负载均衡器
      */
     private String loadBalancer = LoadBalancerKeys.ROUND_ROBIN;
+
+    /**
+     * 重试策略
+     */
+    private String retryStrategy = RetryStrategyKeys.NO;
+
+    /**
+     * 容错策略
+     */
+    private String tolerantStrategy = TolerantStrategyKeys.FAIL_FAST;
 
     /**
      * 注册中心配置

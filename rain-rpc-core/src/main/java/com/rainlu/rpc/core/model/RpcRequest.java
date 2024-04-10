@@ -19,12 +19,12 @@ import java.io.Serializable;
 public class RpcRequest implements Serializable {
 
     /**
-     * 服务名称
+     * 服务名称（接口的全限定名称）
      */
     private String serviceName;
 
     /**
-     * 方法名称
+     * 方法名称（接口中的方法名）
      */
     private String methodName;
 
